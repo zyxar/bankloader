@@ -2,16 +2,16 @@
 
 import md5
 
-code = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/="
+__code = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/="
 
 def decode(string):
     m = []
     i = 0
     while i < len(string):
-        r = code.find(string[i])
-        n = code.find(string[i+1])
-        l = code.find(string[i+2])
-        k = code.find(string[i+3])
+        r = __code.find(string[i])
+        n = __code.find(string[i+1])
+        l = __code.find(string[i+2])
+        k = __code.find(string[i+3])
         t = r << 18 | n << 12 | l << 6 | k;
         v = t >> 16 & 255
         f = t >> 8 & 255
@@ -26,7 +26,7 @@ def decode(string):
         i += 4
     return ''.join(m)
 
-def _c(h, l):
+def __c(h, l):
     k = []
     e = 0
     d = ''
@@ -49,7 +49,7 @@ def _c(h, l):
         g += unichr(ord(l[m]) ^ k[(k[i]+k[j])%256])
     return g
 
-def _b(d, e):
+def __b(d, e):
     h = 0
     g = ''
     l = len(e)
@@ -66,9 +66,9 @@ def decrypt(string, encrypt):
     if f == 'ea':
         d = g
     elif f == 'eb':
-        d = _b(g, _c(encrypt, encrypt))
+        d = __b(g, __c(encrypt, encrypt))
     elif f == 'ed':
-        d = _b(g, md5.new(encrypt).hexdigest())
+        d = __b(g, md5.new(encrypt).hexdigest())
     else:
         d = g
     return d

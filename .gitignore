@@ -1,4 +1,3 @@
-
 #ignore thumbnails created by windows
 Thumbs.db
 #Ignore files build by Visual Studio
@@ -64,3 +63,4 @@ nosetests.xml
 .mr.developer.cfg
 .project
 .pydevproject
+*.js

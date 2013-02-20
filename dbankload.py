@@ -23,9 +23,16 @@ class Loader():
         html = uu.read()
         data = html[html.find('var globallinkdata')+20:]
         data = data[:data.find('</script>')].strip()[:-1]
-        self.data = json.loads(data)
-        self.files = self.data['data']['resource']['files']
-        self.key = self.data['data']['encryKey']
+        try:
+            self.data = json.loads(data)
+        except:
+            sys.stderr.write('failure in loading data.\n')
+            sys.stderr.flush()
+            return False
+        else:
+            self.files = self.data['data']['resource']['files']
+            self.key = self.data['data']['encryKey']
+        return True
     
     def getdownloads(self):
         urls = []
@@ -55,12 +62,13 @@ class Loader():
         return self.files[n]['name']
 
 def main(argv=None):
-    l = Loader(argv[0])
-    for i in xrange(len(l.files)):
-        print l.getname(i)
-        print l.getdownload(i)
-        print l.getxunlei(i)
-        print
+    l = Loader()
+    if l.load(argv[0]):
+        for i in xrange(len(l.files)):
+            print l.getname(i)
+            print l.getdownload(i)
+            print l.getxunlei(i)
+            print
 
 if __name__ == '__main__':
     main(sys.argv[1:])
