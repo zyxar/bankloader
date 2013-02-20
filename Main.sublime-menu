@@ -1,0 +1,20 @@
+[
+    {
+        "caption": "Tools",
+        "id": "tools",
+        "children":
+        [
+            {
+                "caption": "BankLoader",
+                "children":
+                [
+                    {
+                        "caption": "Fetch Remote Object",
+                        "command": "bank_loader",
+                        "args":{}
+                    }
+                ]
+            }
+        ]
+    }
+]

@@ -1,0 +1,7 @@
+[
+    {
+        "caption": "BankLoader: Fetch remote object",
+        "command": "bankloader",
+        "args": {}
+    }
+]
