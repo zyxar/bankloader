@@ -19,6 +19,11 @@ def status(percent):
     sys.stdout.write('\r'+bar)
     sys.stdout.flush()
 
+def savefile(name, stream):
+    ff = open(name, 'wb')
+    ff.write(stream)
+    ff.close()
+
 class Fetcher():
     block_sz = 32 * 1024
     def __init__(self, url=None):
@@ -27,28 +32,36 @@ class Fetcher():
     def fetch(self, url=None):
         payload = url or self.url
         if payload is not None:
-            ss = StringIO()
             uu = urlopen(payload)
-            meta = uu.info()
             filename = payload.split('/')[-1]
-            dld = 0
-            size = int(meta.getheader('content-length'))
-            if exists(filename) and getsize(filename) == size:
+            #TODO: extract filename from response header
+            self.retrieve(uu, filename)
+            uu.close()
+
+    def retrieve(self, socket, filename):
+        size = int(socket.info().getheader('content-length'))
+        if exists(filename) and getsize(filename) == size:
+            try:
                 print "File %s already exists." % filename
-            else:
+            except UnicodeEncodeError:
+                print "File %s already exists." % filename.encode('UTF-8')
+        else:
+            try:
                 print "Downloading: %s. Bytes: %d" % (filename, size)
-                while True:
-                    buf = uu.read(self.block_sz)
-                    if not buf:
-                        break
-                    dld += len(buf)
-                    ss.write(buf)
-                    status(dld*1./size)
-                print
-                ff = open(filename, 'wb')
-                ff.write(ss.getvalue())
-                ff.close()
-                ss.close()
+            except UnicodeEncodeError:
+                print "Downloading: %s. Bytes: %d" % (filename.encode('UTF-8'), size)
+            ss = StringIO()
+            dld = 0
+            while True:
+                buf = socket.read(self.block_sz)
+                if not buf:
+                    break
+                dld += len(buf)
+                ss.write(buf)
+                status(dld*1./size)
+            print
+            savefile(filename, ss.getvalue())
+            ss.close()
 
 if __name__ == '__main__':
     fetcher = Fetcher()
