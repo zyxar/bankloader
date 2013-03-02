@@ -12,6 +12,10 @@
 - compatible with [dbank.js v2.8.3](http://st1.dbank.com/netdisk/js/custom-link1.js?v=2.8.3)
 - main _decrypt_ component is ported from js.
 
+### baidupan.com ###
+
+- Simply as kuaipan.com
+
 ## User Guide ##
 
 - Install:
