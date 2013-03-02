@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 
 from urllib.request import urlopen
+from os.path import join
 from .dbanklink import DBDecoder
+from .fetcher import Fetcher
 import sys
 import json
 
@@ -35,6 +37,17 @@ class Klient():
             self.key = self.data['data']['encryKey']
         uu.close()
         return True
+
+    def download(self, path_prefix=''):
+        names = self.getnames()
+        urls = self.getdownloads()
+        numb = len(names)
+        assert numb == len(urls)
+        fetcher = Fetcher()
+        for i in range(numb):
+            sock = urlopen(urls[i])
+            fetcher.retrieve(sock, join(path_prefix, names[i]))
+            sock.close()
     
     def getdownloads(self):
         urls = []
